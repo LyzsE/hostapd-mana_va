@@ -121,7 +121,7 @@ static void log_ssid(struct hostapd_data *hapd, const u8 *ssid, size_t ssid_len,
 			retrieve_hostapd_sta_taxonomy(hapd, info, reply, reply_len);
 			fprintf(f,MACSTR ", %s, %d, %s\n", MAC2STR(mac), wpa_ssid_txt(ssid, ssid_len), rand, reply);
 			//
-			reply = "";
+			char reply[512] = "";
 			retrieve_hostapd_sta_taxonomy_assoc(hapd, info, reply, reply_len);
 			fprintf(fa,MACSTR ", %s, %d, %s\n", MAC2STR(mac), wpa_ssid_txt(ssid, ssid_len), rand, reply);
 			//
