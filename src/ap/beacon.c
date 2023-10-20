@@ -93,13 +93,8 @@ static void log_ssid(struct hostapd_data *hapd, const u8 *ssid, size_t ssid_len,
 		return; // File not set, so don't log
 	}
 	FILE *f = fopen(hapd->iconf->mana_outfile, "a");
-	if (f != NULL) {
-		int rand=0;
-		if (mac[0] & 2) //Check if locally administered aka random MAC
-			rand=1; 
-	//Запись в файл для assoc
 	FILE *fa = fopen(hapd->iconf->mana_outfile_assoc, "a");
-	if (fa != NULL) {
+	if (f != NULL) {
 		int rand=0;
 		if (mac[0] & 2) //Check if locally administered aka random MAC
 			rand=1; 
