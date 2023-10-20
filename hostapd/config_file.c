@@ -2169,7 +2169,22 @@ static int hostapd_config_fill(struct hostapd_config *conf,
 		fclose(f);
 		conf->mana_outfile = tmp;
 		wpa_printf(MSG_INFO, "MANA: Observed activity will be written to. File %s set.",tmp);
-	} else if (os_strcmp(buf, "mana_ssid_filter_file") == 0) {
+	
+	}
+	//assoc файл
+	  else if (os_strcmp(buf, "mana_outfile_assoc") == 0) {
+		char *tmpa = malloc(strlen(pos)+1);
+		strcpy(tmpa,pos);
+		FILE *fa = fopen(pos, "a");
+		if (!fa) {
+			wpa_printf(MSG_ERROR, "MANA: Line %d: Failed to open activity file '%s'", line, pos);
+			return 1;
+		}
+		fclose(fa);
+		conf->mana_outfile_assoc = tmpa;
+		wpa_printf(MSG_INFO, "MANA: Observed activity will be written to. File %s set.",tmpa);
+	//
+	}	else if (os_strcmp(buf, "mana_ssid_filter_file") == 0) {
 		char *tmp1 = malloc(strlen(pos)+1);
 		strcpy(tmp1,pos);
 		if (hostapd_config_read_ssidlist(pos, &bss->ssid_filter,
@@ -3774,6 +3789,7 @@ struct hostapd_config * hostapd_config_read(const char *fname)
 	conf->mana_loud = 0; //default off; 1 - advertise all networks across all devices, 0 - advertise specific networks to the device it was discovered from
 	conf->mana_macacl = 0; //default off; 0 - off, 1 - extend MAC ACL to management frames
 	conf->mana_outfile = "NOT_SET"; //default none
+	conf->mana_outfile_assoc = "NOT_SET"; //default none
 	conf->mana_ssid_filter_file = "NOT_SET"; //default none
 	conf->mana_ssid_filter_type = 1; //default 1; ssid list is a white list
 	conf->mana_wpe = 0; //default off; 1 - dump credentials captured during EAP exchanges 0 - function as normal

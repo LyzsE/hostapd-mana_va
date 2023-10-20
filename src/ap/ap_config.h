@@ -617,6 +617,7 @@ struct hostapd_config {
 	int mana_loud;
 	int mana_macacl;
 	char * mana_outfile;
+	char * mana_outfile_assoc;
 	char * mana_ssid_filter_file;
 	int mana_ssid_filter_type;
 	int mana_wpe;

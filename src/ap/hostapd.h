@@ -313,6 +313,7 @@ struct hostapd_sta_info {
 	struct os_reltime last_seen;
 #ifdef CONFIG_TAXONOMY
 	struct wpabuf *probe_ie_taxonomy;
+	struct wpabuf *assoc_ie_taxonomy; /*дополнение в таксономию*/
 #endif /* CONFIG_TAXONOMY */
 };
 

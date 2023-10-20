@@ -97,6 +97,12 @@ static void log_ssid(struct hostapd_data *hapd, const u8 *ssid, size_t ssid_len,
 		int rand=0;
 		if (mac[0] & 2) //Check if locally administered aka random MAC
 			rand=1; 
+	//Запись в файл для assoc
+	FILE *fa = fopen(hapd->iconf->mana_outfile_assoc, "a");
+	if (fa != NULL) {
+		int rand=0;
+		if (mac[0] & 2) //Check if locally administered aka random MAC
+			rand=1; 
 
 #ifdef CONFIG_TAXONOMY
 		struct sta_info *sta;
@@ -106,13 +112,24 @@ static void log_ssid(struct hostapd_data *hapd, const u8 *ssid, size_t ssid_len,
 			size_t reply_len = 512;
 			retrieve_sta_taxonomy(hapd, sta, reply, reply_len);
 			fprintf(f,MACSTR ", %s, %d, %s\n", MAC2STR(mac), wpa_ssid_txt(ssid, ssid_len), rand, reply);
+			//
+			fprintf(fa,MACSTR ", %s, %d, %s\n", MAC2STR(mac), wpa_ssid_txt(ssid, ssid_len), rand, reply);
+			//
 		} else if ((info = sta_track_get(hapd->iface, mac)) != NULL) {
 			char reply[512] = "";
 			size_t reply_len = 512;
 			retrieve_hostapd_sta_taxonomy(hapd, info, reply, reply_len);
 			fprintf(f,MACSTR ", %s, %d, %s\n", MAC2STR(mac), wpa_ssid_txt(ssid, ssid_len), rand, reply);
+			//
+			reply = "";
+			retrieve_hostapd_sta_taxonomy_assoc(hapd, info, reply, reply_len);
+			fprintf(fa,MACSTR ", %s, %d, %s\n", MAC2STR(mac), wpa_ssid_txt(ssid, ssid_len), rand, reply);
+			//
 		} else {
 			fprintf(f,MACSTR ", %s, %d\n", MAC2STR(mac), wpa_ssid_txt(ssid, ssid_len), rand);
+			//
+			fprintf(fa,MACSTR ", %s, %d\n", MAC2STR(mac), wpa_ssid_txt(ssid, ssid_len), rand);
+			//
 		}
 #endif /* CONFIG_TAXONOMY */
 #ifndef CONFIG_TAXONOMY
@@ -760,8 +777,11 @@ void sta_track_claim_taxonomy_info(struct hostapd_iface *iface, const u8 *addr,
 		return;
 
 	wpabuf_free(*probe_ie_taxonomy);
+	wpabuf_free(*assoc_ie_taxonomy); /*change*/
 	*probe_ie_taxonomy = info->probe_ie_taxonomy;
 	info->probe_ie_taxonomy = NULL;
+	*assoc_ie_taxonomy = info->assoc_ie_taxonomy;
+	info->assoc_ie_taxonomy = NULL;
 }
 #endif /* CONFIG_TAXONOMY */
 

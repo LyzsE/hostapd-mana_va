@@ -259,6 +259,7 @@ int retrieve_sta_taxonomy(const struct hostapd_data *hapd,
 		return 0;
 	pos += ret;
 	ie_to_string(pos, end - pos, sta->assoc_ie_taxonomy);
+	pos+=ret;
 	pos = os_strchr(pos, '\0');
 	return pos - buf;
 }
@@ -285,6 +286,29 @@ int retrieve_hostapd_sta_taxonomy(const struct hostapd_data *hapd,
 		return 0;
 	return pos - buf;
 }
+//Функция assoc
+int retrieve_hostapd_sta_taxonomy(const struct hostapd_data *hapd,
+                          struct hostapd_sta_info *info, char *buf, size_t buflen)
+{
+	int ret;
+	char *pos, *end;
+
+	if (!info->assoc_ie_taxonomy)
+		return 0;
+
+	ret = os_snprintf(buf, buflen, "wifi4|assoc:");
+	if (os_snprintf_error(buflen, ret))
+		return 0;
+	pos = buf + ret;
+	end = buf + buflen;
+
+	ie_to_string(pos, end - pos, info->assoc_ie_taxonomy);
+	pos = os_strchr(pos, '\0');
+	if (pos >= end)
+		return 0;
+	return pos - buf;
+}
+
 //END MANA
 
 
