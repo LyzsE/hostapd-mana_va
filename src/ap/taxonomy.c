@@ -305,7 +305,6 @@ int retrieve_hostapd_sta_taxonomy(const struct hostapd_data *hapd,
 	}
 	
 }
-//Функция assoc
 
 
 //END MANA
