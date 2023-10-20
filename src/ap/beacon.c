@@ -777,12 +777,24 @@ void sta_track_claim_taxonomy_info(struct hostapd_iface *iface, const u8 *addr,
 		return;
 
 	wpabuf_free(*probe_ie_taxonomy);
-	wpabuf_free(*assoc_ie_taxonomy); /*change*/
 	*probe_ie_taxonomy = info->probe_ie_taxonomy;
 	info->probe_ie_taxonomy = NULL;
+}
+
+void sta_track_claim_taxonomy_info_assoc(struct hostapd_iface *iface, const u8 *addr,
+				   struct wpabuf **assoc_ie_taxonomy)
+{
+	struct hostapd_sta_info *info;
+
+	info = sta_track_get(iface, addr);
+	if (!info)
+		return;
+
+	wpabuf_free(*assoc_ie_taxonomy); /*change*/
 	*assoc_ie_taxonomy = info->assoc_ie_taxonomy;
 	info->assoc_ie_taxonomy = NULL;
 }
+
 #endif /* CONFIG_TAXONOMY */
 
 
