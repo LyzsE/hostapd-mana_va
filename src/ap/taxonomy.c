@@ -244,7 +244,7 @@ int retrieve_sta_taxonomy(const struct hostapd_data *hapd,
 	if (!sta->probe_ie_taxonomy || !sta->assoc_ie_taxonomy)
 		return 0;
 
-	ret = os_snprintf(buf, buflen, "wifi4|probe:");
+	ret = os_snprintf(buf, buflen, "this is retrieve_sta_taxonomy, wifi4|probe:");
 	if (os_snprintf_error(buflen, ret))
 		return 0;
 	pos = buf + ret;
