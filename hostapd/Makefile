@@ -1013,7 +1013,7 @@ OBJS += ../src/fst/fst_ctrl_iface.o
 endif
 endif
 
-ALL=hostpj hostpj_cli
+ALL=hostapd hostapd_cli
 
 all: verify_config $(ALL)
 
@@ -1060,15 +1060,15 @@ install: $(addprefix $(DESTDIR)$(BINDIR)/,$(ALL))
 
 BCHECK=../src/drivers/build.hostapd
 
-hostpj: $(BCHECK) $(OBJS)
-	$(Q)$(CC) $(LDFLAGS) -o hostpj $(OBJS) $(LIBS)
+hostapd: $(BCHECK) $(OBJS)
+	$(Q)$(CC) $(LDFLAGS) -o hostapd $(OBJS) $(LIBS)
 	@$(E) "  LD " $@
 
 ifdef CONFIG_WPA_TRACE
 OBJS_c += ../src/utils/trace.o
 endif
-hostpj_cli: $(OBJS_c)
-	$(Q)$(CC) $(LDFLAGS) -o hostpj_cli $(OBJS_c) $(LIBS_c)
+hostapd_cli: $(OBJS_c)
+	$(Q)$(CC) $(LDFLAGS) -o hostapd_cli $(OBJS_c) $(LIBS_c)
 	@$(E) "  LD " $@
 
 NOBJS = nt_password_hash.o ../src/crypto/ms_funcs.o $(SHA1OBJS)
@@ -1115,7 +1115,7 @@ lcov-html:
 
 clean:
 	$(MAKE) -C ../src clean
-	rm -f core *~ *.o hostpj hostpj_cli nt_password_hash hlr_auc_gw
+	rm -f core *~ *.o hostapd hostapd_cli nt_password_hash hlr_auc_gw
 	rm -f *.d *.gcno *.gcda *.gcov
 	rm -f lcov.info
 	rm -rf lcov-html
