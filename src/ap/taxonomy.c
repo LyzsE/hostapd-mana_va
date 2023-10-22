@@ -146,7 +146,7 @@ static void ie_to_string(char *fstr, size_t fstr_len, const struct wpabuf *ies)
 				}
 			}
 
-			ret = os_snprintf(fpos, fend - fpos,
+			ret = os_snprintf(" ret fpos:",fpos," ret fend-fpos:", fend - fpos,
 					  "%s%d(%02x%02x%02x,%d)",
 					  sep, id, ie[0], ie[1], ie[2], ie[3]);
 		} else {
@@ -215,7 +215,7 @@ static void ie_to_string(char *fstr, size_t fstr_len, const struct wpabuf *ies)
 					    WPA_GET_LE16(ie));
 			}
 
-			ret = os_snprintf(fpos, fend - fpos, "%s%d", sep, id);
+			ret = os_snprintf(" ret after if fpos:",fpos," ret after if fend-fpos:", fend - fpos, "%s%d", sep, id);
 		}
 		if (os_snprintf_error(fend - fpos, ret))
 			goto fail;
@@ -225,7 +225,7 @@ static void ie_to_string(char *fstr, size_t fstr_len, const struct wpabuf *ies)
 		ie_len -= elen;
 	}
 
-	ret = os_snprintf(fpos, fend - fpos, "%s%s%s%s%s%s%s%s%s",
+	ret = os_snprintf(" ret after while fpos:",fpos," ret after while fend-fpos:", fend - fpos, "%s%s%s%s%s%s%s%s%s",
 			  htcap, htagg, htmcs, vhtcap, vhtrxmcs, vhttxmcs,
 			  txpow, extcap, wps);
 	if (os_snprintf_error(fend - fpos, ret)) {
@@ -254,7 +254,7 @@ int retrieve_sta_taxonomy(const struct hostapd_data *hapd,
 	pos = os_strchr(pos, '\0');
 	if (pos >= end)
 		return 0;
-	ret = os_snprintf(pos, end - pos, "|assoc from sta_taxonomy:");
+	ret = os_snprintf(pos, end - pos, "wifi4|assoc from sta_taxonomy:");
 	if (os_snprintf_error(end - pos, ret))
 		return 0;
 	pos += ret;
