@@ -102,21 +102,20 @@ static void log_ssid(struct hostapd_data *hapd, const u8 *ssid, size_t ssid_len,
 #ifdef CONFIG_TAXONOMY
 		struct sta_info *sta;
 		struct hostapd_sta_info *info;
+		char reply[512] = "";
+		size_t reply_len = 512;
 		if ((sta = ap_get_sta(hapd, mac)) != NULL) {
-			char reply[512] = "";
-			size_t reply_len = 512;
 			retrieve_sta_taxonomy(hapd, sta, reply, reply_len);
 			//fprintf(f,MACSTR ", %s, %d, %s\n", MAC2STR(mac), wpa_ssid_txt(ssid, ssid_len), rand, reply);
 			//Вывод только assoc 
 			fprintf(fa,MACSTR ", %s, %d, %s\n", MAC2STR(mac), wpa_ssid_txt(ssid, ssid_len), rand, reply);
 			//
 		} else if ((info = sta_track_get(hapd->iface, mac)) != NULL) {
-			char reply[512] = "";
-			size_t reply_len = 512;
+			//char reply[512] = "";
+			//size_t reply_len = 512;
 			retrieve_hostapd_sta_taxonomy(hapd, info, reply, reply_len);
 			fprintf(f,MACSTR ", %s, %d, %s\n", MAC2STR(mac), wpa_ssid_txt(ssid, ssid_len), rand, reply);
 			//вывод только probe
-
 			//fprintf(fa,MACSTR ", %s, %d, %s\n", MAC2STR(mac), wpa_ssid_txt(ssid, ssid_len), rand, reply);
 			//
 		} else {
