@@ -102,7 +102,8 @@ static void ie_to_string(char *fstr, size_t fstr_len, const struct wpabuf *ies)
 	const u8 *ie;
 	size_t ie_len;
 	int ret;
-
+	//добавить доп. параметры? возможно это нарушит работу, но по идее просто задействует больше памяти
+	
 	os_memset(htcap, 0, sizeof(htcap));
 	os_memset(htagg, 0, sizeof(htagg));
 	os_memset(htmcs, 0, sizeof(htmcs));
@@ -116,15 +117,15 @@ static void ie_to_string(char *fstr, size_t fstr_len, const struct wpabuf *ies)
 
 	if (!ies)
 		return;
-	ie = wpabuf_head(ies);
-	ie_len = wpabuf_len(ies);
+	ie = wpabuf_head(ies); //returns pointer to the head of buffer data - число, сопоставляемое с def хедером для определения типа поля
+	ie_len = wpabuf_len(ies);//Get the current length of a wpabuf buffer data
 
 	while (ie_len >= 2) {
 		u8 id, elen;
 		char *sep = (num++ == 0) ? "" : ",";
 
-		id = *ie++;
-		elen = *ie++;
+		id = *ie++; //переход к следуюшему полю; идентификатор типа элемента длиной в байт (два символа)
+		elen = *ie++; //поле после id ; длина информационного элемента, байт
 		ie_len -= 2;
 
 		if (elen > ie_len)
@@ -146,7 +147,7 @@ static void ie_to_string(char *fstr, size_t fstr_len, const struct wpabuf *ies)
 				}
 			}
 
-			ret = os_snprintf(" ret fpos:",fpos," ret fend-fpos:", fend - fpos,
+			ret = os_snprintf(fpos, fend - fpos,
 					  "%s%d(%02x%02x%02x,%d)",
 					  sep, id, ie[0], ie[1], ie[2], ie[3]);
 		} else {
@@ -215,7 +216,7 @@ static void ie_to_string(char *fstr, size_t fstr_len, const struct wpabuf *ies)
 					    WPA_GET_LE16(ie));
 			}
 
-			ret = os_snprintf(" ret after if fpos:",fpos," ret after if fend-fpos:", fend - fpos, "%s%d", sep, id);
+			ret = os_snprintf(fpos, fend - fpos, "%s%d", sep, id);
 		}
 		if (os_snprintf_error(fend - fpos, ret))
 			goto fail;
@@ -225,7 +226,7 @@ static void ie_to_string(char *fstr, size_t fstr_len, const struct wpabuf *ies)
 		ie_len -= elen;
 	}
 
-	ret = os_snprintf(" ret after while fpos:",fpos," ret after while fend-fpos:", fend - fpos, "%s%s%s%s%s%s%s%s%s",
+	ret = os_snprintf(fpos, fend - fpos, "%s%s%s%s%s%s%s%s%s",
 			  htcap, htagg, htmcs, vhtcap, vhtrxmcs, vhttxmcs,
 			  txpow, extcap, wps);
 	if (os_snprintf_error(fend - fpos, ret)) {

@@ -914,7 +914,7 @@ void handle_probe_req(struct hostapd_data *hapd,
 		struct hostapd_sta_info *info;
 
 		if ((sta = ap_get_sta(hapd, mgmt->sa)) != NULL) {
-			taxonomy_sta_info_probe_req(hapd, sta, ie, ie_len);
+			taxonomy_sta_info_assoc_req(hapd, sta, ie, ie_len); //!!!!! check if something else needs to be changed
 			//START MANA - JUST CHECK TAXONOMY IN OUTPUT
 			char reply[512] = "";
 			size_t reply_len = 512;
