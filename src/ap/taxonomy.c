@@ -243,31 +243,36 @@ int retrieve_sta_taxonomy(const struct hostapd_data *hapd,
 {
 	int ret;
 	char *pos, *end;
-//
+
+	FILE *debug;
+	debug = fopen("deb.log","w");
+	fprintf
+	fprintf(debug,"%#0512x\n", buf);
+/*
 	struct ieee80211_mgmt *mgmt2;
 	u16 fc;
 	mgmt2 = (struct ieee80211_mgmt *) buf;
 	fc = le_to_host16(mgmt2->frame_control);
 	stype = WLAN_FC_GET_STYPE(fc);
-//
-	if (!sta->probe_ie_taxonomy || !sta->assoc_ie_taxonomy)
+*/
+	if (!sta->assoc_ie_taxonomy)
 		return 0;
-	if (stype!=WLAN_FC_STYPE_ASSOC_REQ)
-		return 0;
-	ret = os_snprintf(buf, buflen, "this is retrieve_sta_taxonomy, wifi4|probe:");
+	
+	ret = os_snprintf(buf, buflen, "this is retrieve_sta_taxonomy, wifi4|assoc:");
 	if (os_snprintf_error(buflen, ret))
 		return 0;
+	
 	pos = buf + ret;
 	end = buf + buflen;
 
-	ie_to_string(pos, end - pos, sta->probe_ie_taxonomy);
-	pos = os_strchr(pos, '\0');
-	if (pos >= end)
-		return 0;
-	ret = os_snprintf(pos, end - pos, "wifi4|assoc from sta_taxonomy:");
-	if (os_snprintf_error(end - pos, ret))
-		return 0;
-	pos += ret;
+	//ie_to_string(pos, end - pos, sta->probe_ie_taxonomy);
+	//pos = os_strchr(pos, '\0');
+	//if (pos >= end)
+	//	return 0;
+	//ret = os_snprintf(pos, end - pos, "wifi4|assoc from sta_taxonomy:");
+	//if (os_snprintf_error(end - pos, ret))
+	//	return 0;
+	//pos += ret;
 	ie_to_string(pos, end - pos, sta->assoc_ie_taxonomy);
 	pos+=ret;
 	pos = os_strchr(pos, '\0');
@@ -280,53 +285,21 @@ int retrieve_hostapd_sta_taxonomy(const struct hostapd_data *hapd,
 {
 	int ret;
 	char *pos, *end;
-	FILE *debug;
-	debug = fopen("deb.log","w");
-	fprintf(debug,"%#0512x\n", buf);
-	/*
-	struct ieee80211_mgmt *mgmt2;
-	u16 fc;
-	mgmt2 = (struct ieee80211_mgmt *) buf;
-	fc = le_to_host16(mgmt2->frame_control);
-	stype = WLAN_FC_GET_STYPE(fc);
-	*/
-	//if (!info->probe_ie_taxonomy)
-	//	return 0;
-	//if (stype==WLAN_FC_STYPE_ASSOC_REQ)
-		//return 0;
-	//else if (info->probe_ie_taxonomy)
-	//{
-	//ret = os_snprintf(buf, buflen, "wifi4|probe from hostapd_sta_taxonomy:");
+
+	if (!info->probe_ie_taxonomy)
+		return 0;
+
+	ret = os_snprintf(buf, buflen, "wifi4|probe:");
 	if (os_snprintf_error(buflen, ret))
 		return 0;
 	pos = buf + ret;
 	end = buf + buflen;
 
-	//ie_to_string(pos, end - pos, info->probe_ie_taxonomy);
-	/*pos = os_strchr(pos, '\0');
-	if (pos >= end)
-		return 0;
-	return pos - buf;
-	}
-	*/
-	
-	if (!info->assoc_ie_taxonomy)
-		return 0;
-	else if (info->assoc_ie_taxonomy)
-	{
-	ret = os_snprintf(buf, buflen, "wifi4|assoc from hostapd_sta_taxonomy:");
-	if (os_snprintf_error(buflen, ret))
-		return 0;
-	pos = buf + ret;
-	end = buf + buflen;
-
-	ie_to_string(pos, end - pos, info->assoc_ie_taxonomy);
+	ie_to_string(pos, end - pos, info->probe_ie_taxonomy);
 	pos = os_strchr(pos, '\0');
 	if (pos >= end)
 		return 0;
 	return pos - buf;
-	}
-	
 }
 
 
