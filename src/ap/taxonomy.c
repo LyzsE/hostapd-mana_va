@@ -246,8 +246,8 @@ int retrieve_sta_taxonomy(const struct hostapd_data *hapd,
 
 	FILE *debug;
 	debug = fopen("deb.log","w");
-	fprintf
 	fprintf(debug,"%#0512x\n", buf);
+	fclose(debug);
 /*
 	struct ieee80211_mgmt *mgmt2;
 	u16 fc;
