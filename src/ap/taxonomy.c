@@ -21,8 +21,9 @@
 #include "common/wpa_ctrl.h"
 #include "hostapd.h"
 #include "sta_info.h"
-#include "ieee802_11.h"
-#include "ieee802_11_defs.h"
+
+//#include "ieee802_11.h"
+//#include "ieee802_11_defs.h"
 
 /* Copy a string with no funny schtuff allowed; only alphanumerics. */
 static void no_mischief_strncpy(char *dst, const char *src, size_t n)
@@ -279,31 +280,33 @@ int retrieve_hostapd_sta_taxonomy(const struct hostapd_data *hapd,
 {
 	int ret;
 	char *pos, *end;
-	//
+	/*
 	struct ieee80211_mgmt *mgmt2;
 	u16 fc;
 	mgmt2 = (struct ieee80211_mgmt *) buf;
 	fc = le_to_host16(mgmt2->frame_control);
 	stype = WLAN_FC_GET_STYPE(fc);
-	//
-	if (!info->probe_ie_taxonomy)
-		return 0;
-	if (stype==WLAN_FC_STYPE_ASSOC_REQ)
-		return 0;
-	else if (info->probe_ie_taxonomy)
-	{
-	ret = os_snprintf(buf, buflen, "wifi4|probe from hostapd_sta_taxonomy:");
+	*/
+	//if (!info->probe_ie_taxonomy)
+	//	return 0;
+	//if (stype==WLAN_FC_STYPE_ASSOC_REQ)
+		//return 0;
+	//else if (info->probe_ie_taxonomy)
+	//{
+	//ret = os_snprintf(buf, buflen, "wifi4|probe from hostapd_sta_taxonomy:");
 	if (os_snprintf_error(buflen, ret))
 		return 0;
 	pos = buf + ret;
 	end = buf + buflen;
 
-	ie_to_string(pos, end - pos, info->probe_ie_taxonomy);
-	pos = os_strchr(pos, '\0');
+	//ie_to_string(pos, end - pos, info->probe_ie_taxonomy);
+	/*pos = os_strchr(pos, '\0');
 	if (pos >= end)
 		return 0;
 	return pos - buf;
 	}
+	*/
+	
 	if (!info->assoc_ie_taxonomy)
 		return 0;
 	else if (info->assoc_ie_taxonomy)
