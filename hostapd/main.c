@@ -456,7 +456,7 @@ static void show_version(void)
  		"and contributors\n"
  		"--------------------------------------------------\n"
  		"MANA https://github.com/sensepost/hostapd-mana\n"
-		"Associate catch ver. by EC\n"
+		"Associate catch ver. by ECA\n"
  		"By @singe (dominic@sensepost.com)\n"
 		"Original MANA EAP by Ian (ian@sensepost.com)\n"
  		"Original karma patches by Robin Wood - robin@digininja.org\n"
