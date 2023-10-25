@@ -22,8 +22,6 @@
 #include "hostapd.h"
 #include "sta_info.h"
 
-//#include "ieee802_11.h"
-//#include "ieee802_11_defs.h"
 
 /* Copy a string with no funny schtuff allowed; only alphanumerics. */
 static void no_mischief_strncpy(char *dst, const char *src, size_t n)
@@ -245,20 +243,14 @@ int retrieve_sta_taxonomy(const struct hostapd_data *hapd,
 	char *pos, *end;
 
 	FILE *debug;
-	debug = fopen("deb.log","w");
+	debug = fopen("deb.log","a");
 	fprintf(debug,"%#0512x\n", buf);
 	fclose(debug);
-/*
-	struct ieee80211_mgmt *mgmt2;
-	u16 fc;
-	mgmt2 = (struct ieee80211_mgmt *) buf;
-	fc = le_to_host16(mgmt2->frame_control);
-	stype = WLAN_FC_GET_STYPE(fc);
-*/
+
 	if (!sta->assoc_ie_taxonomy)
 		return 0;
 	
-	ret = os_snprintf(buf, buflen, "this is retrieve_sta_taxonomy, wifi4|assoc:");
+	ret = os_snprintf(buf, buflen, "wifi4|assoc:");
 	if (os_snprintf_error(buflen, ret))
 		return 0;
 	
