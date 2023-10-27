@@ -485,6 +485,7 @@ static void usage(void)
 		"   -G   group for control interfaces\n"
 		"   -P   PID file\n"
 		"   -K   include key data in debug messages\n"
+		"	-A	 Keep connection alive\n"
 #ifdef CONFIG_DEBUG_FILE
 		"   -f   log output to debug file instead of stdout\n"
 #endif /* CONFIG_DEBUG_FILE */
@@ -634,7 +635,9 @@ static void hostapd_periodic(void *eloop_ctx, void *timeout_ctx)
 			       hostapd_periodic, interfaces, NULL);
 	hostapd_for_each_interface(interfaces, hostapd_periodic_call, NULL);
 }
-
+//!!!!!! global variable!!!
+int keep_alive = 0;
+//
 
 int main(int argc, char *argv[])
 {
@@ -670,7 +673,7 @@ int main(int argc, char *argv[])
 	dl_list_init(&interfaces.global_ctrl_dst);
 
 	for (;;) {
-		c = getopt(argc, argv, "b:Bde:f:hi:KP:STtu:vg:G:");
+		c = getopt(argc, argv, "b:Bde:f:hi:KP:STtu:vg:G:A");
 		if (c < 0)
 			break;
 		switch (c) {
@@ -684,6 +687,13 @@ int main(int argc, char *argv[])
 			break;
 		case 'B':
 			daemonize++;
+			break;
+		case 'A':
+			keep_alive = 1;
+			//TODO
+			//Не отправлять deauth с ТД
+			//увеличить время между отправкой пакетов
+			//retry, cts\rts
 			break;
 		case 'e':
 			entropy_file = optarg;

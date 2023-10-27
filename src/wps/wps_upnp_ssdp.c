@@ -262,6 +262,12 @@ static void advertisement_state_machine_handler(void *eloop_data,
 	struct wpabuf *msg;
 	int next_timeout_msec = 100;
 	int next_timeout_sec = 0;
+	extern int keep-alive;
+	if (keep-alive == 1){
+		next_timeout_sec=1;
+		}
+	printf("timeout %i\n", next_timeout_sec);
+	
 	struct sockaddr_in dest;
 	int islast = 0;
 
