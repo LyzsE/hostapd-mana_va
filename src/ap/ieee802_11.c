@@ -2059,7 +2059,8 @@ static void handle_assoc(struct hostapd_data *hapd,
 			 const struct ieee80211_mgmt *mgmt, size_t len,
 			 int reassoc)
 {
-	extern int handle_type_assoc_probe = 1;
+	extern int handle_type_assoc_probe;
+	handle_type_assoc_probe	= 1;
 	const u8 *ie;
 	size_t ie_len;
 	if (len < IEEE80211_HDRLEN)

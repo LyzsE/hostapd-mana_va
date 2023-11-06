@@ -40,6 +40,8 @@ struct mana_ssid *mana_ssidhash = NULL;
 
 #ifdef NEED_AP_MLME
 
+extern int handle_type_assoc_probe;
+
 static u8 * hostapd_eid_rm_enabled_capab(struct hostapd_data *hapd, u8 *eid,
 					 size_t len)
 {
@@ -799,7 +801,8 @@ void handle_probe_req(struct hostapd_data *hapd,
 		      const struct ieee80211_mgmt *mgmt, size_t len,
 		      int ssi_signal)
 {
-	extern int handle_type_assoc_probe = 0;
+	
+	handle_type_assoc_probe = 0;
 	u8 *resp;
 	struct ieee802_11_elems elems;
 	const u8 *ie;
