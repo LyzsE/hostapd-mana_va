@@ -215,8 +215,8 @@ struct sta_info {
 	u8 rrm_enabled_capa[5];
 
 #ifdef CONFIG_TAXONOMY
-	struct wpabuf *probe_ie_taxonomy;
 	struct wpabuf *assoc_ie_taxonomy;
+	struct wpabuf *probe_ie_taxonomy;
 #endif /* CONFIG_TAXONOMY */
 	struct hostapd_ssid *ssid_probe_mana; //MANA
 };
@@ -230,13 +230,23 @@ struct sta_info {
  * after AP_DEAUTH_DELAY seconds has passed after disassociation. */
 #define AP_MAX_INACTIVITY (5 * 60)
 #define AP_DISASSOC_DELAY (3)
-#define AP_DEAUTH_DELAY (1)
+
+#ifdef KEEP_ALIVE
+	#define AP_DEAUTH_DELAY (10)
 /* Number of seconds to keep STA entry with Authenticated flag after it has
  * been disassociated. */
-#define AP_MAX_INACTIVITY_AFTER_DISASSOC (1 * 30)
+	#define AP_MAX_INACTIVITY_AFTER_DISASSOC (10 * 30)
 /* Number of seconds to keep STA entry after it has been deauthenticated. */
-#define AP_MAX_INACTIVITY_AFTER_DEAUTH (1 * 5)
+	#define AP_MAX_INACTIVITY_AFTER_DEAUTH (10 * 5)
+#endif
 
+	#define AP_DEAUTH_DELAY (1)
+/* Number of seconds to keep STA entry with Authenticated flag after it has
+ * been disassociated. */
+	#define AP_MAX_INACTIVITY_AFTER_DISASSOC (1 * 30)
+/* Number of seconds to keep STA entry after it has been deauthenticated. */
+	#define AP_MAX_INACTIVITY_AFTER_DEAUTH (1 * 5)
+	
 
 struct hostapd_data;
 
