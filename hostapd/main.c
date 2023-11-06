@@ -636,7 +636,7 @@ static void hostapd_periodic(void *eloop_ctx, void *timeout_ctx)
 	hostapd_for_each_interface(interfaces, hostapd_periodic_call, NULL);
 }
 //!!!!!! global variable!!!
-//#define KEEP_ALIVE (0)
+int handle_type_assoc_probe; //assoc = 1, probe = 0
 //
 
 int main(int argc, char *argv[])
