@@ -2054,7 +2054,7 @@ static u16 send_assoc_resp(struct hostapd_data *hapd, struct sta_info *sta,
 	return WLAN_STATUS_SUCCESS;
 }
 
-
+/*
 static void handle_assoc(struct hostapd_data *hapd,
 			 const struct ieee80211_mgmt *mgmt, size_t len,
 			 int reassoc)
@@ -2090,7 +2090,8 @@ static void handle_assoc(struct hostapd_data *hapd,
 			return;
 		}
 	}
-#endif /* CONFIG_TESTING_OPTIONS */
+#endif /* CONFIG_TESTING_OPTIONS */ 
+/*
 
 	fc = le_to_host16(mgmt->frame_control);
 	seq_ctrl = le_to_host16(mgmt->seq_ctrl);
@@ -2131,10 +2132,10 @@ static void handle_assoc(struct hostapd_data *hapd,
 		/*
 		 * Mark station as authenticated, to avoid adding station
 		 * entry in the driver as associated and not authenticated
-		 */
+		 */ /*
 		sta->flags |= WLAN_STA_AUTH;
 	} else
-#endif /* CONFIG_IEEE80211R */
+#endif /* CONFIG_IEEE80211R *//*
 	if (sta == NULL || (sta->flags & WLAN_STA_AUTH) == 0) {
 		hostapd_logger(hapd, mgmt->sa, HOSTAPD_MODULE_IEEE80211,
 			       HOSTAPD_LEVEL_INFO, "Station tried to "
@@ -2186,11 +2187,11 @@ static void handle_assoc(struct hostapd_data *hapd,
 	/*
 	 * sta->capability is used in check_assoc_ies() for RRM enabled
 	 * capability element.
-	 */
+	 *//*
 	sta->capability = capab_info;
 
 	/* followed by SSID and Supported rates; and HT capabilities if 802.11n
-	 * is used */
+	 * is used *//*
 	resp = check_assoc_ies(hapd, sta, pos, left, reassoc);
 	if (resp != WLAN_STATUS_SUCCESS)
 		goto fail;
@@ -2245,13 +2246,13 @@ static void handle_assoc(struct hostapd_data *hapd,
 
 #ifdef CONFIG_IEEE80211N
 	update_ht_state(hapd, sta);
-#endif /* CONFIG_IEEE80211N */
+#endif /* CONFIG_IEEE80211N *//*
 
 	hostapd_logger(hapd, sta->addr, HOSTAPD_MODULE_IEEE80211,
 		       HOSTAPD_LEVEL_DEBUG,
 		       "association OK (aid %d)", sta->aid);
 	/* Station will be marked associated, after it acknowledges AssocResp
-	 */
+	 *//*
 	sta->flags |= WLAN_STA_ASSOC_REQ_OK;
 
 #ifdef CONFIG_IEEE80211W
@@ -2263,17 +2264,17 @@ static void handle_assoc(struct hostapd_data *hapd,
 		 * longer valid". Make sure this is only sent protected since
 		 * unprotected frame would be received by the STA that is now
 		 * trying to associate.
-		 */
+		 *//*
 	}
 #endif /* CONFIG_IEEE80211W */
 
 	/* Make sure that the previously registered inactivity timer will not
-	 * remove the STA immediately. */
+	 * remove the STA immediately. *//*
 	sta->timeout_next = STA_NULLFUNC;
 
 #ifdef CONFIG_TAXONOMY
 	taxonomy_sta_info_assoc_req(hapd, sta, pos, left);
-#endif /* CONFIG_TAXONOMY */
+#endif /* CONFIG_TAXONOMY *//*
 
  fail:
 	/*
@@ -2293,7 +2294,7 @@ static void handle_assoc(struct hostapd_data *hapd,
 	 *    set into authorized state, and there are no significant known
 	 *    issues with processing other non-Data Class 3 frames during this
 	 *    window.
-	 */
+	 *//*
 	if (resp == WLAN_STATUS_SUCCESS && add_associated_sta(hapd, sta))
 		resp = WLAN_STATUS_AP_UNABLE_TO_HANDLE_NEW_STA;
 
@@ -2303,7 +2304,7 @@ static void handle_assoc(struct hostapd_data *hapd,
 	 * Remove the station in case tranmission of a success response fails
 	 * (the STA was added associated to the driver) or if the station was
 	 * previously added unassociated.
-	 */
+	 *//*
 	if ((reply_res != WLAN_STATUS_SUCCESS &&
 	     resp == WLAN_STATUS_SUCCESS) || sta->added_unassoc) {
 		hostapd_drv_sta_remove(hapd, sta->addr);
@@ -2343,7 +2344,7 @@ static void handle_disassoc(struct hostapd_data *hapd,
 	sta->acct_terminate_cause = RADIUS_ACCT_TERMINATE_CAUSE_USER_REQUEST;
 	ieee802_1x_notify_port_enabled(sta->eapol_sm, 0);
 	/* Stop Accounting and IEEE 802.1X sessions, but leave the STA
-	 * authenticated. */
+	 * authenticated. *//*
 	accounting_sta_stop(hapd, sta);
 	ieee802_1x_free_station(hapd, sta);
 	if (sta->ipaddr)
