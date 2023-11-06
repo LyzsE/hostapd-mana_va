@@ -782,7 +782,7 @@ void sta_track_claim_taxonomy_info_assoc(struct hostapd_iface *iface, const u8 *
 {
 	struct sta_info *sta;
 
-	info = sta_track_get(iface, addr);
+	sta = sta_track_get(iface, addr);
 	if (!sta)
 		return;
 
@@ -798,7 +798,19 @@ static void handle_assoc(struct hostapd_data *hapd,
 			 const struct ieee80211_mgmt *mgmt, size_t len,
 			 int reassoc)
 {	
+
 	handle_type_assoc_probe = 1;
+	const u8 *ie;
+	size_t ie_len;
+	
+	if (len < IEEE80211_HDRLEN)
+		return;
+	
+	ie = ((const u8 *) mgmt) + IEEE80211_HDRLEN;
+	if (hapd->iconf->track_sta_max_num)
+		sta_track_add(hapd->iface, mgmt->sa);
+	ie_len = len - IEEE80211_HDRLEN;
+	
 	u16 capab_info, listen_interval, seq_ctrl, fc;
 	u16 resp = WLAN_STATUS_SUCCESS, reply_res;
 	const u8 *pos;
