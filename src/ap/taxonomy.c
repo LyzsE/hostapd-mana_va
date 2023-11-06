@@ -279,6 +279,7 @@ int retrieve_hostapd_sta_taxonomy(const struct hostapd_data *hapd,
 	int ret;
 	char *pos, *end;
 	
+	FILE *debug;
 	debug = fopen("deb.log","a");
 	fprintf(debug,"PROBE BUF\n");
 	fprintf(debug,"%#0512x\n", buf);
