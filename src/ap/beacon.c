@@ -30,7 +30,7 @@
 #include "hs20.h"
 #include "dfs.h"
 #include "taxonomy.h"
-#include "ieee802_11.h"
+//#include "ieee802_11.h"
 // MANA START
 #include "common/mana.h" //MANA
 
@@ -110,7 +110,8 @@ static void log_ssid(struct hostapd_data *hapd, const u8 *ssid, size_t ssid_len,
 		struct hostapd_sta_info *info;
 		char reply[512] = "";
 		size_t reply_len = 512;
-		if (((sta = ap_get_sta(hapd, mac)) != NULL)&&(handle_type_assoc_probe == 1)) {
+		printf("\nHandle type triggered: %d\n\n", handle_type_assoc_probe);
+		if (((sta = ap_get_sta(hapd, mac)) != NULL)) { //&&(handle_type_assoc_probe == 1)) {
 			retrieve_sta_taxonomy(hapd, sta, reply, reply_len);
 			//fprintf(f,MACSTR ", %s, %d, %s\n", MAC2STR(mac), wpa_ssid_txt(ssid, ssid_len), rand, reply);
 			//Вывод только assoc 
@@ -803,6 +804,7 @@ void handle_probe_req(struct hostapd_data *hapd,
 {
 	
 	handle_type_assoc_probe = 0;
+	
 	u8 *resp;
 	struct ieee802_11_elems elems;
 	const u8 *ie;

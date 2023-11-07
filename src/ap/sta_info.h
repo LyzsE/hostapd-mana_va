@@ -231,15 +231,16 @@ struct sta_info {
 #define AP_MAX_INACTIVITY (5 * 60)
 #define AP_DISASSOC_DELAY (3)
 
+/*
 #ifdef KEEP_ALIVE
 	#define AP_DEAUTH_DELAY (10)
 /* Number of seconds to keep STA entry with Authenticated flag after it has
  * been disassociated. */
 	#define AP_MAX_INACTIVITY_AFTER_DISASSOC (10 * 30)
-/* Number of seconds to keep STA entry after it has been deauthenticated. */
+/* Number of seconds to keep STA entry after it has been deauthenticated. *//*
 	#define AP_MAX_INACTIVITY_AFTER_DEAUTH (10 * 5)
 #endif
-
+*/
 	#define AP_DEAUTH_DELAY (1)
 /* Number of seconds to keep STA entry with Authenticated flag after it has
  * been disassociated. */
