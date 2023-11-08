@@ -42,11 +42,110 @@
 // MANA START
 #include "common/mana.h" //MANA
 
-struct mana_mac *mana_machash = NULL;
-struct mana_ssid *mana_ssidhash = NULL;
+//struct mana_mac *mana_machash = NULL;
+//struct mana_ssid *mana_ssidhash = NULL;
 // MANA END
 
 extern int handle_type_assoc_probe;
+
+
+
+static u16 check_ssid(struct hostapd_data *hapd, struct sta_info *sta,
+		      const u8 *ssid_ie, size_t ssid_ie_len)
+{
+	if (ssid_ie == NULL)
+		return WLAN_STATUS_UNSPECIFIED_FAILURE;
+	if (hapd->iconf->enable_mana) {
+		wpa_printf(MSG_MSGDUMP, "MANA - Checking SSID for start of association, pass through %s", wpa_ssid_txt(ssid_ie, ssid_ie_len));
+		return WLAN_STATUS_SUCCESS;
+	} else {
+		if (ssid_ie_len != hapd->conf->ssid.ssid_len ||
+			os_memcmp(ssid_ie, hapd->conf->ssid.ssid, ssid_ie_len) != 0) {
+			hostapd_logger(hapd, sta->addr, HOSTAPD_MODULE_IEEE80211,
+					   HOSTAPD_LEVEL_INFO,
+					   "Station tried to associate with unknown SSID "
+					   "'%s'", wpa_ssid_txt(ssid_ie, ssid_ie_len));
+			return WLAN_STATUS_UNSPECIFIED_FAILURE;
+		}
+
+	return WLAN_STATUS_SUCCESS;
+	}
+}
+
+
+static u16 check_wmm(struct hostapd_data *hapd, struct sta_info *sta,
+		     const u8 *wmm_ie, size_t wmm_ie_len)
+{
+	sta->flags &= ~WLAN_STA_WMM;
+	sta->qosinfo = 0;
+	if (wmm_ie && hapd->conf->wmm_enabled) {
+		struct wmm_information_element *wmm;
+
+		if (!hostapd_eid_wmm_valid(hapd, wmm_ie, wmm_ie_len)) {
+			hostapd_logger(hapd, sta->addr,
+				       HOSTAPD_MODULE_WPA,
+				       HOSTAPD_LEVEL_DEBUG,
+				       "invalid WMM element in association "
+				       "request");
+			return WLAN_STATUS_UNSPECIFIED_FAILURE;
+		}
+
+		sta->flags |= WLAN_STA_WMM;
+		wmm = (struct wmm_information_element *) wmm_ie;
+		sta->qosinfo = wmm->qos_info;
+	}
+	return WLAN_STATUS_SUCCESS;
+}
+
+
+static u16 copy_supp_rates(struct hostapd_data *hapd, struct sta_info *sta,
+			   struct ieee802_11_elems *elems)
+{
+	if (!elems->supp_rates) {
+		hostapd_logger(hapd, sta->addr, HOSTAPD_MODULE_IEEE80211,
+			       HOSTAPD_LEVEL_DEBUG,
+			       "No supported rates element in AssocReq");
+		return WLAN_STATUS_UNSPECIFIED_FAILURE;
+	}
+
+	if (elems->supp_rates_len + elems->ext_supp_rates_len >
+	    sizeof(sta->supported_rates)) {
+		hostapd_logger(hapd, sta->addr, HOSTAPD_MODULE_IEEE80211,
+			       HOSTAPD_LEVEL_DEBUG,
+			       "Invalid supported rates element length %d+%d",
+			       elems->supp_rates_len,
+			       elems->ext_supp_rates_len);
+		return WLAN_STATUS_UNSPECIFIED_FAILURE;
+	}
+
+	sta->supported_rates_len = merge_byte_arrays(
+		sta->supported_rates, sizeof(sta->supported_rates),
+		elems->supp_rates, elems->supp_rates_len,
+		elems->ext_supp_rates, elems->ext_supp_rates_len);
+
+	return WLAN_STATUS_SUCCESS;
+}
+
+
+static u16 check_ext_capab(struct hostapd_data *hapd, struct sta_info *sta,
+			   const u8 *ext_capab_ie, size_t ext_capab_ie_len)
+{
+#ifdef CONFIG_INTERWORKING
+	/* check for QoS Map support */
+	if (ext_capab_ie_len >= 5) {
+		if (ext_capab_ie[4] & 0x01)
+			sta->qos_map_enabled = 1;
+	}
+#endif /* CONFIG_INTERWORKING */
+
+	if (ext_capab_ie_len > 0)
+		sta->ecsa_supported = !!(ext_capab_ie[0] & BIT(2));
+
+	return WLAN_STATUS_SUCCESS;
+}
+
+
+
 
 static void log_ssid(struct hostapd_data *hapd, const u8 *ssid, size_t ssid_len, const u8 *mac) {
 	if (os_strcmp("NOT_SET", hapd->iconf->mana_outfile) == 0) {
@@ -684,7 +783,7 @@ static enum ssid_match_result ssid_match(struct hostapd_data *hapd,
 	return wildcard ? WILDCARD_SSID_MATCH : NO_SSID_MATCH;
 }
 
-
+/*
 void sta_track_expire(struct hostapd_iface *iface, int force)
 {
 	struct os_reltime now;
@@ -710,9 +809,10 @@ void sta_track_expire(struct hostapd_iface *iface, int force)
 		sta_track_del(info);
 	}
 }
-
+*/
 
 //static struct hostapd_sta_info * sta_track_get(struct hostapd_iface *iface, //MANA
+/*
 struct hostapd_sta_info * sta_track_get(struct hostapd_iface *iface,
 					       const u8 *addr)
 {
@@ -724,22 +824,22 @@ struct hostapd_sta_info * sta_track_get(struct hostapd_iface *iface,
 
 	return NULL;
 }
-
-
+*/
+/*
 void sta_track_add(struct hostapd_iface *iface, const u8 *addr)
 {
 	struct hostapd_sta_info *info;
 
 	info = sta_track_get(iface, addr);
 	if (info) {
-		/* Move the most recent entry to the end of the list */
+		/* Move the most recent entry to the end of the list *//*
 		dl_list_del(&info->list);
 		dl_list_add_tail(&iface->sta_seen, &info->list);
 		os_get_reltime(&info->last_seen);
 		return;
 	}
 
-	/* Add a new entry */
+	/* Add a new entry *//*
 	info = os_zalloc(sizeof(*info));
 	if (info == NULL)
 		return;
@@ -747,7 +847,7 @@ void sta_track_add(struct hostapd_iface *iface, const u8 *addr)
 	os_get_reltime(&info->last_seen);
 
 	if (iface->num_sta_seen >= iface->conf->track_sta_max_num) {
-		/* Expire oldest entry to make room for a new one */
+		/* Expire oldest entry to make room for a new one *//*
 		sta_track_expire(iface, 1);
 	}
 
@@ -756,8 +856,8 @@ void sta_track_add(struct hostapd_iface *iface, const u8 *addr)
 	dl_list_add_tail(&iface->sta_seen, &info->list);
 	iface->num_sta_seen++;
 }
-
-
+*/
+/*
 struct hostapd_data *
 sta_track_seen_on(struct hostapd_iface *iface, const u8 *addr,
 		  const char *ifname)
@@ -782,7 +882,7 @@ sta_track_seen_on(struct hostapd_iface *iface, const u8 *addr,
 
 	return NULL;
 }
-
+*/
 
 #ifdef CONFIG_TAXONOMY
 
