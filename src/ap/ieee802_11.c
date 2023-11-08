@@ -47,6 +47,7 @@
 #include "taxonomy.h"
 
 #include "assoc.h"
+#include "assoc.c"
 
 u8 * hostapd_eid_supp_rates(struct hostapd_data *hapd, u8 *eid)
 {
