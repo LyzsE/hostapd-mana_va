@@ -809,11 +809,14 @@ void handle_assoc(struct hostapd_data *hapd,
 			 int reassoc)
 {
 	handle_type_assoc_probe = 1;
+	struct ieee802_11_elems elems;
 	u16 capab_info, listen_interval, seq_ctrl, fc;
 	u16 resp = WLAN_STATUS_SUCCESS, reply_res;
 	const u8 *pos;
 	int left, i;
 	struct sta_info *sta;
+	enum ssid_match_result res;
+	
 
 	if (len < IEEE80211_HDRLEN + (reassoc ? sizeof(mgmt->u.reassoc_req) :
 				      sizeof(mgmt->u.assoc_req))) {
