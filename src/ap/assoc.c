@@ -808,18 +808,14 @@ void handle_assoc(struct hostapd_data *hapd,
 			 const struct ieee80211_mgmt *mgmt, size_t len,
 			 int reassoc)
 {
-	u8 *resp;
 	struct ieee802_11_elems elems;
 	const u8 *ie;
-	size_t ie_len;
-	size_t i, resp_len;
 	int noack;
 	int ret;
 	u16 csa_offs[2];
 	size_t csa_offs_len;
 	int iterate = 0; //MANA
 	handle_type_assoc_probe = 1;
-	struct ieee802_11_elems elems;
 	u16 capab_info, listen_interval, seq_ctrl, fc;
 	u16 resp = WLAN_STATUS_SUCCESS, reply_res;
 	const u8 *pos;
