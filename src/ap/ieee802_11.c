@@ -1863,6 +1863,16 @@ int ieee802_11_mgmt(struct hostapd_data *hapd, const u8 *buf, size_t len,
 		handle_probe_req(hapd, mgmt, len, fi->ssi_signal);
 		return 1;
 	}
+	if (stype == WLAN_FC_STYPE_ASSOC_REQ){
+		wpa_printf(MSG_DEBUG, "mgmt::assoc_req");
+		handle_assoc(hapd, mgmt, len, 0);
+		return 1;
+		}
+	if (stype == WLAN_FC_STYPE_REASSOC_REQ){
+		wpa_printf(MSG_DEBUG, "mgmt::reassoc_req");
+		handle_assoc(hapd, mgmt, len, 1);
+		return 1;
+		}
 
 	if (os_memcmp(mgmt->da, hapd->own_addr, ETH_ALEN) != 0) {
 		hostapd_logger(hapd, mgmt->sa, HOSTAPD_MODULE_IEEE80211,
@@ -1879,16 +1889,6 @@ int ieee802_11_mgmt(struct hostapd_data *hapd, const u8 *buf, size_t len,
 	case WLAN_FC_STYPE_AUTH:
 		wpa_printf(MSG_DEBUG, "mgmt::auth");
 		handle_auth(hapd, mgmt, len);
-		ret = 1;
-		break;
-	case WLAN_FC_STYPE_ASSOC_REQ:
-		wpa_printf(MSG_DEBUG, "mgmt::assoc_req");
-		handle_assoc(hapd, mgmt, len, 0);
-		ret = 1;
-		break;
-	case WLAN_FC_STYPE_REASSOC_REQ:
-		wpa_printf(MSG_DEBUG, "mgmt::reassoc_req");
-		handle_assoc(hapd, mgmt, len, 1);
 		ret = 1;
 		break;
 	case WLAN_FC_STYPE_DISASSOC:

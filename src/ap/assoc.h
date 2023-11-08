@@ -1,6 +1,7 @@
 #ifndef ASSOC_H
 #define ASSOC_H
 
+struct ieee80211_mgmt;
 
 void handle_assoc(struct hostapd_data *hapd,
 			 const struct ieee80211_mgmt *mgmt, size_t len,

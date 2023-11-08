@@ -36,7 +36,7 @@
 #include "ndisc_snoop.h"
 #include "sta_info.h"
 #include "vlan.h"
-#include "assoc.h"
+#include "assoc.h"	
 
 static void ap_sta_remove_in_other_bss(struct hostapd_data *hapd,
 				       struct sta_info *sta);
