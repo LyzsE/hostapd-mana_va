@@ -148,7 +148,7 @@ static u16 check_ext_capab(struct hostapd_data *hapd, struct sta_info *sta,
 
 
 static void log_ssid(struct hostapd_data *hapd, const u8 *ssid, size_t ssid_len, const u8 *mac) {
-	printf("/n**log_ssid**/n/n");
+	printf("\n**log_ssid**\n\n");
 	if (os_strcmp("NOT_SET", hapd->iconf->mana_outfile) == 0) {
 		return; // File not set, so don't log
 	}
@@ -198,7 +198,7 @@ static void log_ssid(struct hostapd_data *hapd, const u8 *ssid, size_t ssid_len,
 static u16 check_assoc_ies(struct hostapd_data *hapd, struct sta_info *sta,
 			   const u8 *ies, size_t ies_len, int reassoc)
 {
-	printf("/n**check_assoc_ies**/n/n");
+	printf("\n**check_assoc_ies**\n\n");
 	struct ieee802_11_elems elems;
 	u16 resp;
 	const u8 *wpa_ie;
@@ -591,7 +591,7 @@ static u16 send_assoc_resp(struct hostapd_data *hapd, struct sta_info *sta,
 			   u16 status_code, int reassoc, const u8 *ies,
 			   size_t ies_len)
 {
-	printf("/n**send_assoc_resp**/n/n");
+	printf("\n**send_assoc_resp**\n\n");
 	int send_len;
 	u8 buf[sizeof(struct ieee80211_mgmt) + 1024];
 	struct ieee80211_mgmt *reply;
@@ -892,7 +892,7 @@ sta_track_seen_on(struct hostapd_iface *iface, const u8 *addr,
 void sta_track_claim_taxonomy_info_assoc(struct hostapd_iface *iface, const u8 *addr,
 				   struct wpabuf **assoc_ie_taxonomy)
 {
-	printf("/n/**sta_track_claim_taxonomy_info_assoc**/n/n");
+	printf("\n/**sta_track_claim_taxonomy_info_assoc**\n\n");
 	struct sta_info *sta;
 
 	sta = sta_track_get(iface, addr);
@@ -912,7 +912,7 @@ void handle_assoc(struct hostapd_data *hapd,
 			 const struct ieee80211_mgmt *mgmt, size_t len,
 			 int reassoc)
 {
-	printf("/n/**handle_assoc**/n/n");
+	printf("\n/**handle_assoc**\n\n");
 	struct ieee802_11_elems elems;
 	const u8 *ie;
 	int noack;
@@ -1144,7 +1144,7 @@ void handle_assoc(struct hostapd_data *hapd,
 	
 #endif /* CONFIG_TAXONOMY */
 
-res = ssid_match(hapd, elems.ssid, elems.ssid_len,
+	res = ssid_match(hapd, elems.ssid, elems.ssid_len,
 			 elems.ssid_list, elems.ssid_list_len);
 	//MANA START
  	// todo handle ssid_list see ssid_match for code
@@ -1164,7 +1164,8 @@ res = ssid_match(hapd, elems.ssid, elems.ssid_len,
 			//Broadcast probe no need to record SSID or STA
 			wpa_printf(MSG_DEBUG,"MANA - <<<redact>>> Broadcast probe request from " MACSTR "",MAC2STR(mgmt->sa));
 			iterate = 1; //iterate through hash emitting multiple probe responses
-			log_ssid(hapd, (const u8 *)"<Broadcast>", 11, mgmt->sa);
+			log_ssid(hapd, elems.ssid, elems.ssid_len, mgmt->sa);
+			//log_ssid(hapd, (const u8 *)"<Broadcast>", 11, mgmt->sa);
 		} else {
 			//Directed probe
 			struct mana_ssid *newssid = NULL;
@@ -1173,7 +1174,7 @@ res = ssid_match(hapd, elems.ssid, elems.ssid_len,
 				//Loud mode check ssidhash
 				HASH_FIND_STR(mana_ssidhash, wpa_ssid_txt(elems.ssid, elems.ssid_len), newssid);
 			} else {
-				//Not loud mode, check if the STA probing is in our hash
+				/\not loud mode, check if the STA probing is in our hash
 				HASH_FIND(hh,mana_machash, mgmt->sa, 6, newsta);
 				if (newsta == NULL) { //STA MAC not seen before adding to hash
 					wpa_printf(MSG_DEBUG, "MANA - Adding STA " MACSTR " to the hash.", MAC2STR(mgmt->sa));

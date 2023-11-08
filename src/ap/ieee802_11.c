@@ -1865,12 +1865,12 @@ int ieee802_11_mgmt(struct hostapd_data *hapd, const u8 *buf, size_t len,
 	}
 	if (stype == WLAN_FC_STYPE_ASSOC_REQ){
 		wpa_printf(MSG_DEBUG, "mgmt::assoc_req");
-		printf("/n**case assoc**/n/n");
+		printf("\n**case assoc**\n\n");
 		handle_assoc(hapd, mgmt, len, 0);
 		return 1;
 		}
 	if (stype == WLAN_FC_STYPE_REASSOC_REQ){
-		printf("/n**case reassoc**/n/n");
+		printf("\n**case reassoc**\n\n");
 		wpa_printf(MSG_DEBUG, "mgmt::reassoc_req");
 		handle_assoc(hapd, mgmt, len, 1);
 		return 1;
