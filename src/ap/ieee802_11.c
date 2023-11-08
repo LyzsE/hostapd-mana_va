@@ -1867,6 +1867,7 @@ int ieee802_11_mgmt(struct hostapd_data *hapd, const u8 *buf, size_t len,
 		wpa_printf(MSG_DEBUG, "mgmt::assoc_req");
 		printf("\n**case assoc**\n\n");
 		handle_assoc(hapd, mgmt, len, 0);
+		printf("\n**case assoc/return**\n\n");
 		return 1;
 		}
 	if (stype == WLAN_FC_STYPE_REASSOC_REQ){

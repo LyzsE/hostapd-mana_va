@@ -912,8 +912,9 @@ void handle_assoc(struct hostapd_data *hapd,
 			 const struct ieee80211_mgmt *mgmt, size_t len,
 			 int reassoc)
 {
-	printf("\nht_capab: %s\n",hapd->iconf->ht_capab);
+	
 	printf("\n\**handle_assoc**\n\n");
+	printf("\nht_capab: %s\n",hapd->iconf->ht_capab);
 	struct ieee802_11_elems elems;
 	const u8 *ie;
 	int noack;
