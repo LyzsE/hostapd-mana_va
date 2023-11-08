@@ -26,6 +26,7 @@ LIB_OBJS= \
 	ap_mlme.o \
 	authsrv.o \
 	beacon.o \
+	assoc.o \
 	bss_load.o \
 	ctrl_iface_ap.o \
 	dfs.o \
