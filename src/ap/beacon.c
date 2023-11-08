@@ -30,7 +30,6 @@
 #include "hs20.h"
 #include "dfs.h"
 #include "taxonomy.h"
-//#include "ieee802_11.h"
 // MANA START
 #include "common/mana.h" //MANA
 
@@ -99,7 +98,7 @@ static void log_ssid(struct hostapd_data *hapd, const u8 *ssid, size_t ssid_len,
 		return; // File not set, so don't log
 	}
 	FILE *f = fopen(hapd->iconf->mana_outfile, "a");
-	FILE *fa = fopen(hapd->iconf->mana_outfile_assoc, "a");
+	//FILE *fa = fopen(hapd->iconf->mana_outfile_assoc, "a");
 	if (f != NULL) {
 		int rand=0;
 		if (mac[0] & 2) //Check if locally administered aka random MAC
@@ -113,9 +112,9 @@ static void log_ssid(struct hostapd_data *hapd, const u8 *ssid, size_t ssid_len,
 		printf("\nHandle type triggered: %d\n\n", handle_type_assoc_probe);
 		if (((sta = ap_get_sta(hapd, mac)) != NULL)) { //&&(handle_type_assoc_probe == 1)) {
 			retrieve_sta_taxonomy(hapd, sta, reply, reply_len);
-			//fprintf(f,MACSTR ", %s, %d, %s\n", MAC2STR(mac), wpa_ssid_txt(ssid, ssid_len), rand, reply);
+			fprintf(f,MACSTR ", %s, %d, %s\n", MAC2STR(mac), wpa_ssid_txt(ssid, ssid_len), rand, reply);
 			//Вывод только assoc 
-			fprintf(fa,MACSTR ", %s, %d, %s\n", MAC2STR(mac), wpa_ssid_txt(ssid, ssid_len), rand, reply);
+			//fprintf(fa,MACSTR ", %s, %d, %s\n", MAC2STR(mac), wpa_ssid_txt(ssid, ssid_len), rand, reply);
 			//
 		} else if ((info = sta_track_get(hapd->iface, mac)) != NULL) {
 			//char reply[512] = "";
@@ -127,7 +126,7 @@ static void log_ssid(struct hostapd_data *hapd, const u8 *ssid, size_t ssid_len,
 		} else {
 			fprintf(f,MACSTR ", %s, %d\n", MAC2STR(mac), wpa_ssid_txt(ssid, ssid_len), rand);
 			//
-			fprintf(fa,MACSTR ", %s, %d\n", MAC2STR(mac), wpa_ssid_txt(ssid, ssid_len), rand);
+			//fprintf(fa,MACSTR ", %s, %d\n", MAC2STR(mac), wpa_ssid_txt(ssid, ssid_len), rand);
 			//
 		}
 #endif /* CONFIG_TAXONOMY */
@@ -779,7 +778,7 @@ void sta_track_claim_taxonomy_info(struct hostapd_iface *iface, const u8 *addr,
 	*probe_ie_taxonomy = info->probe_ie_taxonomy;
 	info->probe_ie_taxonomy = NULL;
 }
-
+/*
 void sta_track_claim_taxonomy_info_assoc(struct hostapd_iface *iface, const u8 *addr,
 				   struct wpabuf **assoc_ie_taxonomy)
 {
@@ -789,11 +788,11 @@ void sta_track_claim_taxonomy_info_assoc(struct hostapd_iface *iface, const u8 *
 	if (!sta)
 		return;
 
-	wpabuf_free(*assoc_ie_taxonomy); /*change*/
+	wpabuf_free(*assoc_ie_taxonomy); /*change*//*
 	*assoc_ie_taxonomy = sta->assoc_ie_taxonomy;
 	sta->assoc_ie_taxonomy = NULL;
 }
-
+*/
 #endif /* CONFIG_TAXONOMY */
 
 

@@ -36,9 +36,11 @@ sta_track_seen_on(struct hostapd_iface *iface, const u8 *addr,
 		  const char *ifname);
 void sta_track_claim_taxonomy_info(struct hostapd_iface *iface, const u8 *addr,
 				   struct wpabuf **probe_ie_taxonomy);
+				   
+/*
 void sta_track_claim_taxonomy_info_assoc(struct hostapd_iface *iface, const u8 *addr,
 				   struct wpabuf **assoc_ie_taxonomy);
-
+*/
 #endif /* BEACON_H */
 
 // MANA START
