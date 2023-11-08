@@ -1174,7 +1174,7 @@ void handle_assoc(struct hostapd_data *hapd,
 				//Loud mode check ssidhash
 				HASH_FIND_STR(mana_ssidhash, wpa_ssid_txt(elems.ssid, elems.ssid_len), newssid);
 			} else {
-				/\not loud mode, check if the STA probing is in our hash
+				//not loud mode, check if the STA probing is in our hash
 				HASH_FIND(hh,mana_machash, mgmt->sa, 6, newsta);
 				if (newsta == NULL) { //STA MAC not seen before adding to hash
 					wpa_printf(MSG_DEBUG, "MANA - Adding STA " MACSTR " to the hash.", MAC2STR(mgmt->sa));
