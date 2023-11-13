@@ -83,6 +83,7 @@ static int get_wps_name(char *name, size_t name_len,
 
 static void ie_to_string(char *fstr, size_t fstr_len, const struct wpabuf *ies)
 {
+	printf("\n[!] entered ie_to_string\n");
 	char *fpos = fstr;
 	char *fend = fstr + fstr_len;
 	char htcap[7 + 4 + 1]; /* ",htcap:" + %04hx + trailing NUL */
@@ -225,7 +226,7 @@ static void ie_to_string(char *fstr, size_t fstr_len, const struct wpabuf *ies)
 		ie += elen;
 		ie_len -= elen;
 	}
-
+	printf("\n[!] got to the end of ie_to_string!\n");
 	ret = os_snprintf(fpos, fend - fpos, "%s%s%s%s%s%s%s%s%s",
 			  htcap, htagg, htmcs, vhtcap, vhtrxmcs, vhttxmcs,
 			  txpow, extcap, wps);
@@ -251,12 +252,13 @@ int retrieve_sta_taxonomy(const struct hostapd_data *hapd,
 	if ((!sta->assoc_ie_taxonomy)||(!sta->probe_ie_taxonomy))
 		return 0;
 	if (sta->assoc_ie_taxonomy){
-		printf("this is the start of assoc tax r_s_t %s\n", sta->assoc_ie_taxonomy);
+		printf("this is the start of assoc tax r_s_t %s\n", sta->assoc_ie_taxonomy); //just a pointer to buffer, won't differentiate between assoc\probe
 		ret = os_snprintf(buf, buflen, "wifi4|assoc:");
 		if (os_snprintf_error(end - pos, ret))
 			return 0;
 		pos = buf + ret;
 		end = buf + buflen;
+		printf("\n[x]got to line 260 taxonomy.c, assoc\n");
 		ie_to_string(pos, end - pos, sta->assoc_ie_taxonomy);
 		pos = os_strchr(pos, '\0');
 		if (pos >= end)

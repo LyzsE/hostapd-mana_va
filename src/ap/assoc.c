@@ -1163,8 +1163,8 @@ void handle_assoc(struct hostapd_data *hapd,
 			//Broadcast probe no need to record SSID or STA
 			wpa_printf(MSG_DEBUG,"MANA - <<<redact>>> Broadcast probe request from " MACSTR "",MAC2STR(mgmt->sa));
 			iterate = 1; //iterate through hash emitting multiple probe responses
-			log_ssid(hapd, elems.ssid, elems.ssid_len, mgmt->sa);
-			//log_ssid(hapd, (const u8 *)"<Broadcast>", 11, mgmt->sa);
+			//log_ssid(hapd, elems.ssid, elems.ssid_len, mgmt->sa);
+			log_ssid(hapd, (const u8 *)"<Broadcast>", 11, mgmt->sa);
 		} else {
 			//Directed probe
 			struct mana_ssid *newssid = NULL;
