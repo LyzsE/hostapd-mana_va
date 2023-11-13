@@ -252,7 +252,7 @@ int retrieve_sta_taxonomy(const struct hostapd_data *hapd,
 	if ((!sta->assoc_ie_taxonomy)||(!sta->probe_ie_taxonomy))
 		return 0;
 	if (sta->assoc_ie_taxonomy){
-		printf("this is the start of assoc tax r_s_t %s\n", sta->assoc_ie_taxonomy); //just a pointer to buffer, won't differentiate between assoc\probe
+		printf("this is the start of assoc tax r_s_t %u\n", sta->assoc_ie_taxonomy->buf); //just a pointer to buffer, won't differentiate between assoc\probe
 		ret = os_snprintf(buf, buflen, "wifi4|assoc:");
 		if (os_snprintf_error(end - pos, ret))
 			return 0;
@@ -315,6 +315,7 @@ int retrieve_hostapd_sta_taxonomy(const struct hostapd_data *hapd,
 	if ((!info->probe_ie_taxonomy)||(!info->assoc_ie_taxonomy))
 		return 0;
 	if (info->assoc_ie_taxonomy){
+		printf("this is the start of assoc tax r_h_s_t %s\n", sta->probe_ie_taxonomy);
 		ret = os_snprintf(buf, buflen, "wifi4|assoc:");
 		if (os_snprintf_error(buflen, ret))
 			return 0;
@@ -328,6 +329,7 @@ int retrieve_hostapd_sta_taxonomy(const struct hostapd_data *hapd,
 		return pos - buf;
 	}
 	else if (info->probe_ie_taxonomy){
+		printf("this is the start of probe tax r_h_s_t %s\n", sta->probe_ie_taxonomy);
 		ret = os_snprintf(buf, buflen, "wifi4|probe:");
 		if (os_snprintf_error(buflen, ret))
 			return 0;
