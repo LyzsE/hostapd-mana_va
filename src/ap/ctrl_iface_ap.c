@@ -446,7 +446,7 @@ int hostapd_ctrl_iface_signature(struct hostapd_data *hapd,
 	sta = ap_get_sta(hapd, addr);
 	if (!sta)
 		return -1;
-
+	printf("\n\n!!!\nDEBUG FOR CTRL_IFACE_AP.C! retrieve_sta_taxonomy was called from here\n!!!\n\n");
 	return retrieve_sta_taxonomy(hapd, sta, buf, buflen);
 }
 #endif /* CONFIG_TAXONOMY */

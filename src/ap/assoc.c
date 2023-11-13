@@ -149,7 +149,7 @@ static u16 check_ext_capab(struct hostapd_data *hapd, struct sta_info *sta,
 
 static void log_ssid(struct hostapd_data *hapd, const u8 *ssid, size_t ssid_len, const u8 *mac) {
 	printf("\n**log_ssid**\n\n");
-	if (os_strcmp("NOT_SET", hapd->iconf->mana_outfile) == 0) {
+	if (os_strcmp("NOT_SET", hapd->iconf->mana_outfile_assoc) == 0) {
 		return; // File not set, so don't log
 	}
 	//FILE *f = fopen(hapd->iconf->mana_outfile, "a");
@@ -167,8 +167,6 @@ static void log_ssid(struct hostapd_data *hapd, const u8 *ssid, size_t ssid_len,
 		printf("\nHandle type triggered: %d\n\n", handle_type_assoc_probe);
 		if (((sta = ap_get_sta(hapd, mac)) != NULL)&&(handle_type_assoc_probe == 1)) {
 			retrieve_sta_taxonomy(hapd, sta, reply, reply_len);
-			//fprintf(f,MACSTR ", %s, %d, %s\n", MAC2STR(mac), wpa_ssid_txt(ssid, ssid_len), rand, reply);
-
 			fprintf(fa,MACSTR ", %s, %d, %s\n", MAC2STR(mac), wpa_ssid_txt(ssid, ssid_len), rand, reply);
 			//
 		} else if (((info = sta_track_get(hapd->iface, mac)) != NULL)&&(handle_type_assoc_probe == 1)) {
@@ -177,7 +175,6 @@ static void log_ssid(struct hostapd_data *hapd, const u8 *ssid, size_t ssid_len,
 			retrieve_hostapd_sta_taxonomy(hapd, info, reply, reply_len);
 			fprintf(fa,MACSTR ", %s, %d, %s\n", MAC2STR(mac), wpa_ssid_txt(ssid, ssid_len), rand, reply);
 
-			//
 		} else {
 			//fprintf(f,MACSTR ", %s, %d\n", MAC2STR(mac), wpa_ssid_txt(ssid, ssid_len), rand);
 			//
@@ -892,7 +889,7 @@ sta_track_seen_on(struct hostapd_iface *iface, const u8 *addr,
 void sta_track_claim_taxonomy_info_assoc(struct hostapd_iface *iface, const u8 *addr,
 				   struct wpabuf **assoc_ie_taxonomy)
 {
-	printf("\n/**sta_track_claim_taxonomy_info_assoc**\n\n");
+	printf("\n\**sta_track_claim_taxonomy_info_assoc**\n\n");
 	struct sta_info *sta;
 
 	sta = sta_track_get(iface, addr);
