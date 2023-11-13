@@ -310,7 +310,7 @@ int retrieve_hostapd_sta_taxonomy(const struct hostapd_data *hapd,
 	fclose(debug);
 	
 	
-	if ((!info->probe_ie_taxonomy)||(!info->assoc)_ie_taxonomy))
+	if ((!info->probe_ie_taxonomy)||(!info->assoc_ie_taxonomy))
 		return 0;
 	if (info->assoc_ie_taxonomy){
 		ret = os_snprintf(buf, buflen, "wifi4|assoc:");
