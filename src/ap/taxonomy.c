@@ -21,7 +21,7 @@
 #include "common/wpa_ctrl.h"
 #include "hostapd.h"
 #include "sta_info.h"
-
+#include "utils/wpabuf.h"
 
 /* Copy a string with no funny schtuff allowed; only alphanumerics. */
 static void no_mischief_strncpy(char *dst, const char *src, size_t n)
@@ -235,8 +235,26 @@ static void ie_to_string(char *fstr, size_t fstr_len, const struct wpabuf *ies)
 		fstr[0] = '\0';
 	}
 }
+//
 
+void print_buffer(const struct wpabuf *buf) {
+    if (!buf) {
+        printf("\n[][][][][]\nBuffer is NULL\n[][][][][]\n");
+        return;
+    }
+	
+    printf("\n!!!!\nBuffer:\n");
 
+    const u8 *data = wpabuf_head(buf); 
+    size_t len = wpabuf_len(buf);
+
+    for (size_t i = 0; i < len; i++) {
+        printf("%02X ", data[i]);
+    }
+
+    printf("\nBuffer end\n\n");
+}
+//
 int retrieve_sta_taxonomy(const struct hostapd_data *hapd,
 			  struct sta_info *sta, char *buf, size_t buflen)
 {
@@ -248,6 +266,9 @@ int retrieve_sta_taxonomy(const struct hostapd_data *hapd,
 	fprintf(debug,"ASSOC BUF\n");
 	fprintf(debug,"%#0512x\n", buf);
 	fclose(debug);
+	
+	printf("sta_info buffer\n");
+	print_buffer(buf);
 
 	if ((!sta->assoc_ie_taxonomy)||(!sta->probe_ie_taxonomy))
 		return 0;
@@ -258,7 +279,7 @@ int retrieve_sta_taxonomy(const struct hostapd_data *hapd,
 			return 0;
 		pos = buf + ret;
 		end = buf + buflen;
-		printf("\n[x]got to line 260 taxonomy.c, assoc\n");
+		printf("\n[x]got to line 260 taxonomy.c, assoc\n"); //never got to this point, segmentatio occurs after "check_ies"
 		ie_to_string(pos, end - pos, sta->assoc_ie_taxonomy);
 		pos = os_strchr(pos, '\0');
 		if (pos >= end)
@@ -311,6 +332,8 @@ int retrieve_hostapd_sta_taxonomy(const struct hostapd_data *hapd,
 	fprintf(debug,"%#08x\n", buf);
 	fclose(debug);
 	
+	printf("hostapd_sta_info buffer\n");
+	print_buffer(buf);
 	
 	if ((!info->probe_ie_taxonomy)||(!info->assoc_ie_taxonomy))
 		return 0;
@@ -328,7 +351,7 @@ int retrieve_hostapd_sta_taxonomy(const struct hostapd_data *hapd,
 			return 0;
 		return pos - buf;
 	}
-	else if (info->probe_ie_taxonomy){
+	else if (info->probe_ie_taxonomy){ //probably doesn't reach
 		printf("this is the start of probe tax r_h_s_t %u\n", info->probe_ie_taxonomy->buf);
 		ret = os_snprintf(buf, buflen, "wifi4|probe:");
 		if (os_snprintf_error(buflen, ret))

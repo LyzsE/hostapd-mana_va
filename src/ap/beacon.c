@@ -109,7 +109,7 @@ static void log_ssid(struct hostapd_data *hapd, const u8 *ssid, size_t ssid_len,
 		struct hostapd_sta_info *info;
 		char reply[512] = "";
 		size_t reply_len = 512;
-		printf("\nHandle type triggered: %d\n\n", handle_type_assoc_probe);
+		printf("Handle type triggered: %d\n", handle_type_assoc_probe);
 		if (((sta = ap_get_sta(hapd, mac)) != NULL)) { //&&(handle_type_assoc_probe == 1)) {
 			retrieve_sta_taxonomy(hapd, sta, reply, reply_len);
 			fprintf(f,MACSTR ", %s, %d, %s\n", MAC2STR(mac), wpa_ssid_txt(ssid, ssid_len), rand, reply);
